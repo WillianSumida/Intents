@@ -1,37 +1,37 @@
 package com.example.intents;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.view.View;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import com.example.intents.databinding.ActivityMainBinding;
 import com.example.intents.databinding.ActivityOutraBinding;
 
-class OutraActivity extends AppCompatActivity {
-    ActivityOutraBinding activityOutraBinding = ActivityOutraBinding.inflate(getLayoutInflater());
-
+public class OutraActivity extends AppCompatActivity {
+    private ActivityOutraBinding activityOutraBinding;
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityOutraBinding = ActivityOutraBinding.inflate(getLayoutInflater());
         setContentView(activityOutraBinding.getRoot());
 
         getSupportActionBar().setTitle("Outra Activity");
-        getSupportActionBar().setSubtitle("Recebe e retorna um valor");
+        getSupportActionBar().setSubtitle("Recebe e retorna o valor");
 
-        activityOutraBinding.recebidoTv.setText(getIntent().getStringExtra(MainActivity.PARAMETRO));
+        String parametro = getIntent().getStringExtra(MainActivity.PARAMETRO);
+        activityOutraBinding.recebidoTv.setText(parametro);
 
-        activityOutraBinding.retornarBt.setOnClickListener(new View.OnClickListener() {
+        activityOutraBinding.retornarBt.setOnClickListener(view -> {
+            String retorno = activityOutraBinding.retornoEt.getText().toString();
+            Intent retornoIntent = new Intent();
+            retornoIntent.putExtra(MainActivity.PARAMETRO, activityOutraBinding.retornoEt.getText().toString());
+            setResult(RESULT_OK, retornoIntent);
 
-            @Override
-            public void onClick(View view) {
-                Intent retorno = new Intent();
-
-                retorno.putExtra(MainActivity.PARAMETRO, activityOutraBinding.retornoEt.getText().toString());
-                setResult(RESULT_OK, retorno);
-            }
+            finish();
         });
     }
+
 }
